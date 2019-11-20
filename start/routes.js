@@ -21,5 +21,5 @@ Route.group(() => {
   Route.post('signin', 'AuthController.signin')
   Route.post('signup', 'AuthController.signup')
 
-  
+  Route.resource('vehicle', 'VehicleController').only(['index', 'show'])
 }).prefix('api/v1')
