@@ -7,6 +7,10 @@ class ServiceSchema extends Schema {
   up () {
     this.create('services', (table) => {
       table.increments()
+      table.string('creator_id')
+      table.string('name')
+      table.text('description')
+      table.decimal('price')
       table.timestamps()
     })
   }

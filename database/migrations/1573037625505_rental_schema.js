@@ -17,6 +17,7 @@ class RentalSchema extends Schema {
         'RESERVA_CANCELADA',
       ])
       table.boolean('reserved')
+      table.text('details')
       table.datetime('start')
       table.datetime('end')
       table.timestamps()
