@@ -65,8 +65,42 @@ class UserController {
     } catch (e) {
       console.error(e)
       return response.status(500).send({ message: 'Internal Server Error' })
-    }
+    }  
+  }
+
+  async update ({ request, response, params }) {
+    const data = request.only([
+      'id',
+      'email'
+    ])
     
+    try {
+      /** @type {import('../../Models/User')} */
+      const user = await User.query()
+        .where('id', params.id)
+        .fetch()
+
+      user.merge(data)
+
+      await user.save()
+    } catch (e) {
+      console.error(e)
+      return response.status(500).send({ message: 'Internal Server Error' })
+    }
+  }
+
+  async destroy ({ response, params }) {
+    try {
+      const user = await User.find(params.id)
+
+      if (!user)
+        return response.status(404).send({ success: false, message: 'Resource Not Found' })
+
+      await user.delete()
+      return response.send({ success: true, message: 'Resource Successfully Deleted' })
+    } catch (e) {
+      return response.status(500).send({ success: false, message: 'Internal Server Error' })
+    }
   }
 }
 
