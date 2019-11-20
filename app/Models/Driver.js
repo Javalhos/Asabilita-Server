@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Driver extends Model {
+
+  static get incrementing () {
+    return false
+  }
 }
 
 module.exports = Driver

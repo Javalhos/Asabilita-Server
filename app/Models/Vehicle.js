@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Vehicle extends Model {
+
+  static get incrementing () {
+    return false
+  } 
 }
 
 module.exports = Vehicle

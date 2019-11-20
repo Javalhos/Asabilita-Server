@@ -7,6 +7,9 @@ const Model = use('Model')
 const Hash = use('Hash')
 
 class User extends Model {
+  static get incrementing () {
+    return false
+  } 
   static boot () {
     super.boot()
 

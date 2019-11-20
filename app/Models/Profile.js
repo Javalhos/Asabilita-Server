@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Profile extends Model {
+
+  static get incrementing () {
+    return false
+  } 
 }
 
 module.exports = Profile

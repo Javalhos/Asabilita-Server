@@ -1,8 +1,5 @@
 'use strict'
 
-/** @type {typeof import('../../Models/Profile')} */
-const Profile = use('App/Models/Profile')
-
 /** @type {typeof import('../../Models/User')} */
 const User = use('App/Models/User')
 
@@ -41,6 +38,7 @@ class UserController {
     ])
     const profileData = request.only([
       'id',
+      'email',
       'firstname',
       'lastname',
       'mobile',
@@ -59,7 +57,8 @@ class UserController {
         return response.status(500).send({ message: 'Internal Server Error' })
       
       await user.profile().create(profileData)
-      await user.driver().create(driverData)
+      if (driverData.cnh)
+        await user.driver().create(driverData)
 
       return response.send(user)
     } catch (e) {
