@@ -22,4 +22,6 @@ Route.group(() => {
   Route.post('signup', 'AuthController.signup')
 
   Route.resource('vehicle', 'VehicleController').only(['index', 'show'])
+  Route.resource('user', 'UserController').only(['index', 'show', 'store', 'update', 'destroy'])
+  Route.post('reserve', 'RentalController.reserve').middleware('auth')
 }).prefix('api/v1')
