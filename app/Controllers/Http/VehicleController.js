@@ -65,6 +65,34 @@ class VehicleController {
       return response.status(500).send({ message: 'Internal Server Error' })
     }
   }
+
+  async store ({ request, response }) {
+    const vehicleData = request.only([
+      'id',
+      'brand',
+      'model',
+      'year',
+      'mileage',
+      'price',
+      'status',
+    ])
+
+    try {
+      const vehicle = await Vehicle.create(vehicleData)
+
+      if (!vehicle)
+        throw Error('Failed to create Vehicle')
+      
+      return response.send(vehicle)
+    } catch (e) {
+      console.log(e, e.message)
+      return response.status(500).send({ message: 'Internal Server Error' })
+    }
+  }
+
+  async update ({ request, response, params }) {
+    
+  }
 }
 
 module.exports = VehicleController

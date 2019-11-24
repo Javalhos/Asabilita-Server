@@ -11,7 +11,7 @@ class VehicleSchema extends Schema {
       table.string('model')
       table.integer('year')
       table.integer('mileage')
-      table.float('price')
+      table.decimal('price')
       table.enum('status', [
         'DISPONIVEL',
         'INDISPONIVEL',
