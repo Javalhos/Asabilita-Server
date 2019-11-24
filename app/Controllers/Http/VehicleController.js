@@ -41,7 +41,7 @@ class VehicleController {
     let user
 
     try {
-      user = await auth.getUser
+      user = await auth.getUser()
     } catch (e) {
       console.error(e)
     }
@@ -66,7 +66,9 @@ class VehicleController {
     }
   }
 
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
+    let user
+
     const vehicleData = request.only([
       'id',
       'brand',
@@ -78,7 +80,16 @@ class VehicleController {
     ])
 
     try {
-      const vehicle = await Vehicle.create(vehicleData)
+      user = await auth.getUser()
+    } catch (e) {
+      console.error(e)
+    }
+
+    try {
+      // if (user.can())
+        const vehicle = await Vehicle.create(vehicleData)
+      // else
+      //   throw Error('The user does not have permission to create a vehicle')
 
       if (!vehicle)
         throw Error('Failed to create Vehicle')
@@ -91,7 +102,71 @@ class VehicleController {
   }
 
   async update ({ request, response, params }) {
+    let user
     
+    const vehicleData = request.only([
+      'brand',
+      'model',
+      'year',
+      'mileage',
+      'price',
+      'status'
+    ])
+
+    try {
+      user = await auth.getUser()
+    } catch (e) {
+      console.error(e)
+    }
+
+    try {
+      // if (user.can()) {
+        const vehicle = await Vehicle.query()
+          .where('id', params.id)
+          .fetch()
+
+        if (!vehicle)
+          throw Error('Vehicle not found')
+
+        vehicle.merge(vehicleData)
+        await vehicle.save()
+
+        return response.status(200).send({ message: 'Vehicle updated' })
+      // } else {
+      //   throw Error('The user does not have permission to create a vehicle')
+      // }
+    } catch (e) {
+      console.error(e)
+      return response.status(500).send({ message: 'Internal Server Error' })
+    }
+  }
+
+  async destroy ({ response, params, auth }) {
+    let user
+
+    try {
+      user = await auth.getUser()
+    } catch (e) {
+      console.error(e)
+    }
+
+    try {
+      // if (user.can()) {
+        const vehicle = await Vehicle.find(params.id)
+
+        if (!vehicle)
+          return response.status(404).send({ success: false, message: 'Vehicle Not Found' })
+
+        await vehicle.delete()
+
+        return response.status(200).send({ message: 'Vehicle deleted' })
+      // } else {
+      //   throw Error('The user does not have permission to delete a vehicle')
+      // }
+    } catch (e) {
+      console.error(e)
+      return response.status(500).send({ message: 'Internal Server Error' })
+    }
   }
 }
 
